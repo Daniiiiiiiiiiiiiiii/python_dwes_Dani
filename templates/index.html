@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5 mb-5">APP API-REST PYTHON - FLASK - MYSQLDB</h1>
+        <h1 class="text-center mt-5 mb-5">JUGADORES CON PYTHON - FLASK - MYSQLDB</h1>
     </div>
     {% with messages = get_flashed_messages() %} {% if messages %} {% for message in
         messages %}
@@ -37,20 +37,16 @@
             <div class="col-md-6 col-lg-4 mb-3">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="text-center">Alta Estudiante</h5>
+                        <h5 class="text-center">Alta Jugadores</h5>
                     </div>
                     <div class="card-body">
-                        <form action="/estudiantes" method="POST">
+                        <form action="/jugadores" method="POST">
                             <label>Nombre</label>
                             <input type="text" class="form-control mb-3" name="nombre">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control mb-3" name="apellidos">
-                            <label>Email</label>
-                            <input type="text" class="form-control mb-3" name="email">
                             <label>Edad</label>
-                            <input type="text" class="form-control mb-3" name="edad">
-                            <label>Biografía</label>
-                            <input type="textarea" class="form-control mb-3" name="bio">
+                            <input type="number" class="form-control mb-3" name="edad">
+                            <label>Club</label>
+                            <input type="text" class="form-control mb-3" name="club">
                             <button class="btn btn-primary col-lg-12 col-md-12 col-sm-12" type="submit">Guardar</button>
                         </form>
                     </div>
@@ -60,33 +56,26 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="text-center">Estudiantes</h5>
+                        <h5 class="text-center">Jugadores</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group">
                             <div class="row row-col-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-2">
-                                {% for estudiante in estudiantes %}
-
+                                {% for jugador in jugador %}
                                     <div class="col">
                                         <li class="list-group-item mb-3">
-                                            <form action="/edit/{{estudiante.id}}" method="POST">
+                                            <form action="/edit/{{jugador.id}}" method="POST">
                                                 <small>Nombre</small>
-                                                <input type="text" class="form-control" value="{{estudiante.nombre}}" name="nombre">
-                                                <small>Apellidos</small>
-                                                <input type="text" class="form-control" value="{{estudiante.apellidos}}" name="apellidos">
-                                                <small>Email</small>
-                                                <input type="text" class="form-control" value="{{estudiante.email}}" name="email">
+                                                <input type="text" class="form-control" value="{{jugador.nombre}}" name="nombre">
                                                 <small>Edad</small>
-                                                <input type="text" class="form-control" value="{{estudiante.edad}}" name="edad">
-                                                <small>Biografía</small>
-                                                <input type="textarea" class="form-control" value="{{estudiante.biografia}}" name="bio">
+                                                <input type="number" class="form-control" value="{{jugador.edad}}" name="edad">
+                                                <small>Club</small>
+                                                <input type="text" class="form-control" value="{{jugador.club}}" name="club">
                                                 <button class="btn btn-primary btn-sm mt-3" type="submit">Editar</button>
-                                                <a href="{{url_for('deleteEstudiante', id=estudiante.id)}}" 
-                                                        class="btn btn-danger btn-sm mt-3">Eliminar</a>
+                                                <a href="{{url_for('deleteJugador', id=jugador.id)}}" class="btn btn-danger btn-sm mt-3">Eliminar</a>
                                             </form>
                                         </li>
                                     </div>
-
                                 {% endfor %}
                             </div>
                         </ul>

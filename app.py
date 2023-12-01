@@ -1,37 +1,37 @@
 from flask import Flask, render_template, flash, request, Response, jsonify, redirect, url_for
-from database import app, db, EstudianteSchema
-from estudiante import Estudiante
+from database import app, db, JugadorSchema
+from jugador import Jugador
 
-student_schema = EstudianteSchema()
-students_schema = EstudianteSchema(many=True)
+jugador_schema = JugadorSchema()
+jugador_schema = JugadorSchema(many=True)
+
+app.app_context().push()
+db.create_all()
 
 @app.route('/')
 def home():
-    estudiantes = Estudiante.query.all()
-    estudiantesLeidos = students_schema.dump(estudiantes)
-    return render_template('index.html', estudiantes = estudiantesLeidos)
+    jugador = Jugador.query.all()
+    jugadoresLeidos = jugador_schema.dump(jugador)
+    
+    return render_template('index.html', jugador = jugadoresLeidos)
 
     # return jsonify(estudiantesLeidos)
 
 #Method Post
-@app.route('/estudiantes', methods=['POST'])
-def addEstudiante():
+@app.route('/jugadores', methods=['POST'])
+def addJugador():
     nombre = request.form['nombre']
-    apellidos = request.form['apellidos']
-    email = request.form['email']
     edad = request.form['edad']
-    bio = request.form['bio']
+    club = request.form['club']
 
-    if nombre and apellidos and email and edad and bio:
-        nuevo_estudiante = Estudiante(nombre, apellidos, email, edad, bio)
-        db.session.add(nuevo_estudiante)
+    if nombre and edad and club:
+        nuevo_jugador = Jugador(nombre, edad, club)
+        db.session.add(nuevo_jugador)
         db.session.commit()
         response = jsonify({
             'nombre' : nombre,
-            'apellidos' : apellidos,
-            'email' : email, 
             'edad' : edad,
-            'bio' : bio
+            'club' : club
         })
         return redirect(url_for('home'))
     else:
@@ -39,37 +39,33 @@ def addEstudiante():
 
 #Method delete
 @app.route('/delete/<id>')
-def deleteEstudiante(id):
-    estudiante = Estudiante.query.get(id)
-    db.session.delete(estudiante)
+def deleteJugador(id):
+    jugador = Jugador.query.get(id)
+    db.session.delete(jugador)
     db.session.commit()
     
-    flash('Estudiante ' + id + ' eliminado correctamente')
+    flash('Jugador ' + id + ' eliminado correctamente')
     return redirect(url_for('home'))
 
 #Method Put
 @app.route('/edit/<id>', methods=['POST'])
-def editEstudiante(id):    
+def editJugador(id):    
     
     nombre = request.form['nombre']
-    apellidos = request.form['apellidos']
-    email = request.form['email']
     edad = request.form['edad']
-    bio = request.form['bio']
+    club = request.form['club']
     
-    if nombre and apellidos and email and edad and bio:
-        estudiante = Estudiante.query.get(id)
+    if nombre and edad and club:
+        jugador = Jugador.query.get(id)
   # return student_schema.jsonify(student)
-        estudiante.nombre = nombre
-        estudiante.apellidos = apellidos
-        estudiante.email = email
-        estudiante.edad = edad
-        estudiante.biografia = bio
+        jugador.nombre = nombre
+        jugador.edad = edad
+        jugador.club = club
         
         db.session.commit()
         
-        response = jsonify({'message' : 'Estudiante ' + id + ' actualizado correctamente'})
-        flash('Estudiante ' + id + ' modificado correctamente')
+        response = jsonify({'message' : 'Jugador ' + id + ' actualizado correctamente'})
+        flash('Jugador ' + id + ' modificado correctamente')
         return redirect(url_for('home'))
     else:
         return notFound()
